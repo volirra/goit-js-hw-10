@@ -1,59 +1,68 @@
-import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
+import axios from 'axios';
+axios.defaults.headers.common['x-api-key'] =
+  'live_dOJ39ImEqWH3cF1jUJI4PMe7tAnZXHOkINz33Hfe1NJ2IErVO1ESFhxy6AB6WCAO';
+import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
 const breedSelect = document.querySelector('.breed-select');
-const loader = document.querySelector('.loader');
-const error = document.querySelector('.error');
+
+const infoLoader = document.querySelector('.loader');
+const selectError = document.querySelector('.error');
 const catInfo = document.querySelector('.cat-info');
-const catImage = document.querySelector('.cat-image');
-const catName = document.querySelector('.cat-name');
-const catDescription = document.querySelector('.cat-description');
-const catTemperament = document.querySelector('.cat-temperament');
 
-// Function to populate breed options in the select element
-async function populateBreeds() {
-  try {
-    const breeds = await fetchBreeds();
-    breeds.forEach(breed => {
-      const option = document.createElement('option');
-      option.value = breed.id;
-      option.textContent = breed.name;
-      breedSelect.appendChild(option);
+window.addEventListener('load', init);
+
+function init() {
+  let breedsData;
+  fetchBreeds()
+    .then(data => {
+      breedsData = data;
+      data.forEach(breed => {
+        const option = document.createElement('option');
+        option.value = breed.id;
+        option.textContent = breed.name;
+        breedSelect.appendChild(option);
+
+        breedSelect.classList.remove('is-hidden');
+        infoLoader.classList.add('is-hidden');
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      selectError.classList.remove('is-hidden');
+      breedSelect.classList.add('is-hidden');
+      infoLoader.classList.add('is-hidden');
     });
-  } catch (err) {
-    console.error('Error fetching breeds:', err);
-    showError();
-  }
+
+  breedSelect.addEventListener('change', () => {
+    const selectBreedId = breedSelect.value;
+    infoLoader.classList.remove('is-hidden');
+    catInfo.classList.add('is-hidden');
+    selectError.classList.add('is-hidden');
+
+    fetchCatByBreed(selectBreedId)
+      .then(result => {
+        const catData = result[0];
+        const breedData = breedsData.find(
+          breed => breed.id === catData.breeds[0].id
+        );
+
+        const markup = createMarkup(catData, breedData);
+        catInfo.innerHTML = markup;
+
+        infoLoader.classList.add('is-hidden');
+        catInfo.classList.remove('is-hidden');
+      })
+      .catch(error => {
+        console.log(error);
+        selectError.classList.remove('is-hidden');
+        infoLoader.classList.add('is-hidden');
+      });
+  });
 }
 
-async function displayCatInfo(breedId) {
-  try {
-    const catData = await fetchCatByBreed(breedId);
-    const cat = catData[0];
-    catImage.src = cat.url;
-    catName.textContent = cat.breeds[0].name;
-    catDescription.textContent = cat.breeds[0].description;
-    catTemperament.textContent = `Temperament: ${cat.breeds[0].temperament}`;
-    catInfo.style.display = 'block';
-  } catch (err) {
-    console.error('Error fetching cat info:', err);
-    showError();
-  }
+function createMarkup(catData, breedData) {
+  return `<img src='${catData.url}' width='300' alt='${breedData.name}'/>
+        <div class='textInfo'><h1>${breedData.name}</h1>
+        <p>${breedData.description}</p>
+        <p><b>Temperament:</b> ${breedData.temperament}</p></div>`;
 }
-
-function hideLoader() {
-  loader.style.display = 'none';
-}
-
-function showError() {
-  error.style.display = 'block';
-}
-
-breedSelect.addEventListener('change', event => {
-  const breedId = event.target.value;
-  catInfo.style.display = 'none';
-  loader.style.display = 'block';
-  error.style.display = 'none';
-  displayCatInfo(breedId).then(hideLoader);
-});
-
-populateBreeds().then(hideLoader);
