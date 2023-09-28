@@ -1,9 +1,9 @@
 const BASE_URL = 'https://api.thecatapi.com/v1/';
-const API_KEY =
-  'live_yBI02igIcefpcD2AUW0cwA8QfQTdJY7SV7SyHlO3KuUhh4lZJ1xAzcW2VeCRUnde';
+const API_KEY = 'live_yBI02igIcefpcD2AUW0cwA8QfQTdJY7SV7SyHlO3KuUhh4lZJ1xAzcW2VeCRUnde';
 
 export function fetchBreeds() {
-  return fetch('${BASE_URL}/breeds').then(resp => {
+  return fetch('${BASE_URL}/breeds')
+    .then(resp => {
     if (!resp.ok) {
       throw new Error(resp.statusText);
     }
@@ -12,9 +12,8 @@ export function fetchBreeds() {
 }
 
 export function fetchBreedsById(id) {
-  return fetch(
-    '${BASE_URL}/images/search?breed_ids=${id}api_key=${API_KEY}'
-  ).then(resp => {
+  return fetch('${BASE_URL}/images/search?breed_ids=${id}&api_key=${API_KEY}')
+    .then(resp => {
     if (!resp.ok) {
       throw new Error(resp.statusText);
     }
