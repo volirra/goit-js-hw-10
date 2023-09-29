@@ -1,46 +1,27 @@
-.container {
-    max-width: 400px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .breed-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .loader {
-    display: none;
-  }
-  
-  .error {
-    display: none;
+.breed-select{
+    width: 200px;
+    height: 25px;
+}
+
+.error{
     color: red;
-  }
-  
-  .cat-info {
-    display: none;
+}
+
+.loader{
+    font-weight: 600;
+}
+
+.cat-info{
+    display: flex;
+    gap: 30px;
     margin-top: 20px;
-    text-align: left;
-  }
-  
-  .cat-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-  }
-  
-  .cat-name {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .cat-description {
-    margin-bottom: 10px;
-  }
-  
-  .cat-temperament {
-    font-style: italic;
-  }
+}
+
+.textInfo{
+    font-size: large;
+    max-width: 700px;
+}
+
+.is-hidden{
+    display: none;
+}
