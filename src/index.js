@@ -17,10 +17,10 @@ function init() {
         const option = document.createElement('option');
         option.value = breed.id;
         option.textContent = breed.name;
-        breedSelect.appendChild(option);
+        //breedSelect.appendChild(option);
 
-        breedSelect.classList.remove('is-hidden');
-        infoLoader.classList.add('is-hidden');
+        //breedSelect.classList.remove('is-hidden');
+        //infoLoader.classList.add('is-hidden');
       });
     })
     .catch(error => {
