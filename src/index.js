@@ -13,16 +13,17 @@ function init() {
   fetchBreeds()
     .then(data => {
       breedsData = data;
-      data.forEach(breed => {
+      const options = data.map(breed => {
         const option = document.createElement('option');
         option.value = breed.id;
         option.textContent = breed.name;
-        //breedSelect.appendChild(option);
-
-        //breedSelect.classList.remove('is-hidden');
-        //infoLoader.classList.add('is-hidden');
+        return option;
       });
+      breedSelect.appendChild(...options);
+      breedSelect.classList.remove('is-hidden');
+      infoLoader.classList.add('is-hidden');
     })
+
     .catch(error => {
       console.log(error);
       selectError.classList.remove('is-hidden');
